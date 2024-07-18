@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoute');
+const cors = require('cors');
 //configure env
 dotenv.config({path : './config.env'});
 
@@ -13,6 +14,7 @@ connectDB();
 const app = express();
 
 //middlewares
+app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 

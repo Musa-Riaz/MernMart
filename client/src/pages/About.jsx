@@ -2,7 +2,7 @@ import React from 'react'
 import Layout from '../components/layout/Layout'
 const About = () => {
   return (
-    <Layout>
+    <Layout title={"About Us"}>
       <div className="row contactus ">
         <div className="col-md-6 ">
           <img
