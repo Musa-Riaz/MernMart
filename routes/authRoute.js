@@ -23,9 +23,14 @@ router.post("/forgot-password", forgotPasswordController);
 //test routes
 router.get("/test", requireSignIn, testController); //removed the isAdmin middleware for now because its not working
 
-//protected route auth
+//protected User route auth
 router.get("/user-auth", requireSignIn, (req, res) => {
   res.status(200).json({ ok: true });
 });
+
+//protected Admin route
+router.get('/admin-auth', requireSignIn, (req, res) =>{
+  res.status(200).json({ok:true})
+})
 
 module.exports = router;
