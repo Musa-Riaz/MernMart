@@ -92,3 +92,9 @@
   justify-content: center;
 }
 
+
+.product-link{
+  text-decoration: none !important;
+  color:black;
+
+}

@@ -3,7 +3,7 @@ import Layout from '../../components/layout/Layout'
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios';
-import AuthStyle from '../../style/AuthStyle.css'
+import "../../style/AuthStyle.css";
 import { useAuth } from '../../context/auth';
 import toast from 'react-hot-toast';
 const Login = () => {

@@ -21,7 +21,7 @@ router.delete('/delete-category/:id', requireSignIn, deleteCategoryController );
 
 
 //get all
-router.get('/get-all-category', requireSignIn, getAllCategoryController);
+router.get('/get-all-category', getAllCategoryController); //removed requireSignIn middleware because the categories were not being displayed in the homepage becasue of this middleware
 
 //get single category
 router.get('/get-category/:slug', requireSignIn, getCategoryController);
