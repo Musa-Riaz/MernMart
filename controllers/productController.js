@@ -1,5 +1,6 @@
 const { default: slugify } = require('slugify');
 const productModel = require('../models/productModel');
+const categoryModel = require('../models/categoryModel');
 const fs = require('fs');
 
 exports.createProductController = async (req, res) => {
@@ -218,3 +219,149 @@ exports.deleteProductController =async (req, res) =>{
     }
 }
 
+
+//Filter products
+exports.productFiltersController = async (req, res) => {
+    try{
+
+        const {checked, radio}  = req.body;
+        let args = {}; //args is an object that will store the filters
+        if(checked.length > 0) args.category = checked; //if checked is not empty, then args.category will be equal to checked
+        if(radio.length) args.price = {$gte: radio[0], $lte: radio[1]}; //if radio is not empty, then args.price will be equal to radio
+        const products = await productModel.find(args).populate('category').select('-photo').sort({createAt:-1});
+        res.status(200).json({
+            status: 'success',
+            products
+        })
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+            status: 'fail',
+            message: 'Error in product filters controller',
+            err
+        })
+    }
+}
+
+//product Count
+
+exports.productCountController = async (req, res) => {
+    try{
+
+        const total = await productModel.find({}).estimatedDocumentCount();
+        res.status(200).json({
+            status:'true',
+            total
+        })
+
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+            status:'fail',
+            message:"There was an error in the product count controller",
+            err
+        })
+    }
+}
+
+
+//product page list
+
+exports.productPageController = async (req, res) => {
+    try{
+
+        const perPage = 6;
+        const page = req.params.page ? req.params.page : 1;
+        const products = await productModel.find({}).select('-photo').skip((perPage * page) - perPage).limit(perPage).sort({createAt:-1});
+        res.status(200).json({
+            status:'success',
+            products
+        })
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+            status:'fail',
+            message:"There was an error in the product page controller",
+            err
+        })
+    }
+}
+
+//search product
+
+exports.productSearchController = async (req, res) =>{
+    try{
+        const {keyword} = req.params;
+
+        const result = await productModel.find({$or: [
+            {name:{$regex: keyword, $options: 'i'}},
+            {description:{$regex: keyword, $options: 'i'}}
+        ]}).select("-photo");
+
+        res.status(200).json({
+            status:'success',
+            result
+        })
+    }
+    
+    catch(err)
+    {
+        console.log(err);
+        res.status(500).json({
+            status:'fail',
+            message:"There was an error in the product search controller",
+            err
+        })
+    }
+}
+
+//related products
+
+exports.relatedProductController = async (req, res) =>{
+    try{
+
+        const {pid, cid} = req.params;
+        const products = await productModel.find({_id:{$ne:pid}, category:cid}).limit(4).select('-photo');
+        console.log(products);
+        res.status(200).json({
+            status:'success',
+            products
+        })
+
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+            status:'fail',
+            message:"There was an error in the related product controller",
+            err
+        })
+    }
+
+}
+
+//get products by category
+exports.productCategoryController = async (req, res) => {
+    
+    try{
+
+        const category = await categoryModel.findOne({slug: req.params.slug})
+        const product = await productModel.find({category: category}).populate('category')
+        res.status(200).json({
+            status:'success',
+            category,
+            product
+        })
+
+    }catch(err){
+        console.log(err)
+        res.status(500).json({
+            status:'fail',
+            message:"There was an error in the product category controller",
+            err
+        })
+    }
+}

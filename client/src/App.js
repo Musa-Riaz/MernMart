@@ -18,13 +18,19 @@ import Orders from './pages/Orders.jsx';
 import Profile from './pages/Profile.jsx';
 import Products from './pages/admin/Products.jsx';
 import UpdateProduct from './pages/admin/UpdateProduct.jsx';
-
-
+import Search from './pages/Search.jsx';
+import ProductDetails from './pages/ProductDetails.jsx';
+import Categories from './pages/Categories.jsx';
+import CategoryProduct from './pages/CategoryProduct.jsx';
 function App() {
   return (
    <>
    <Routes>
     <Route path='/' element={<HomePage />}/>
+    <Route path='/search' element={<Search />}/>
+    <Route path='/product/:slug' element={<ProductDetails />}/>
+    <Route path='/categories' element={<Categories />}/>
+    <Route path='/category/:slug' element={<CategoryProduct />}/>
     <Route path='/dashboard' element={<PrivateRoute />}>
     <Route path='user' element={<DashBoard />}/>
     <Route path='user/orders' element={<Orders />}/>
