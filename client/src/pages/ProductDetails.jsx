@@ -3,6 +3,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import '../style/ProductDetailsStyles.css';
 const ProductDetails = () => {
   const params = useParams();
   //initial details
