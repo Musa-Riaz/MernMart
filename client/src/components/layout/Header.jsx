@@ -5,9 +5,12 @@ import { useAuth } from "../../context/auth";
 import SearchComponent from "../SearchComponent";
 import toast from "react-hot-toast";
 import useCategory from "../../hooks/useCategory";
+import { useCart } from "../../context/cart";
+import {Badge} from 'antd';
 const Header = () => {
   const [auth, setAuth] = useAuth();
   const categories = useCategory();
+  const [cart] = useCart();
   function handleLogout() {
     setAuth({
       ...auth,
@@ -45,23 +48,29 @@ const Header = () => {
               {/* if user exists, then show him logout, else show him register and login */}
               {!auth.user ? (
                 <>
+                  <li className="nav-item">
                   <NavLink to="/register" className="nav-link">
                     Register
                   </NavLink>
+                  </li>
+                  <li className="nav-item">
                   <NavLink to="/login" className="nav-link">
                     Login
                   </NavLink>
+                  </li>
+                
                 </>
               ) : (
                 <>
-                  <NavLink
+                <li className="nav-item dropdown">
+                  <Link
                     className="nav-link dropdown-toggle"
                     role="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
                     {auth?.user?.name}
-                  </NavLink>
+                  </Link>
                   <ul className="dropdown-menu">
                     <li>
                       <NavLink
@@ -73,22 +82,42 @@ const Header = () => {
                         DashBoard
                       </NavLink>
                     </li>
+                    <li className="nav-item">
+                    <NavLink to="/about" className="dropdown-item">
+                        About Us
+                    </NavLink>
+                  </li>
+                    <li className="nav-item">
+                    <NavLink to="/policy" className="dropdown-item">
+                        Privacy Policy
+                    </NavLink>
+                  </li>
+                    <li className="nav-item">
+                    <NavLink to="/contact" className="dropdown-item">
+                        Contact Us
+                    </NavLink>
+                  </li>
                     <li>
                       <NavLink
                         onClick={handleLogout}
                         to="/login"
-                        className="nav-link"
+                        className="dropdown-item"
                       >
                         Logout
                       </NavLink>
                     </li>
                   </ul>
+                  </li>
                 </>
               )}
+              <li className="nav-item">
               <NavLink to="/cart" className="nav-link">
-                Cart
+              <Badge count = {cart?.length} showZero offset={[10, -5]}>
+                Cart 
+              </Badge>
               </NavLink>
-
+              </li>
+            
               <li className="nav-item dropdown">
                 <Link
                   className="nav-link dropdown-toggle"

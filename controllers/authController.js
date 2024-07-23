@@ -1,6 +1,7 @@
 const userModel = require('../models/userModel');
 const {comparePassword,hashPassword} = require('../utils/authHelper');
 const JWT = require('jsonwebtoken');
+const orderModel = require('../models/orderModel');
 exports.registerController = async (req, res) => {
  
     try{
@@ -182,4 +183,106 @@ exports.forgotPasswordController = async (req, res) =>{
             message: 'Error in forgot password',
         })
     }
+}
+
+exports.profileUpdateController = async (req, res) =>{
+
+    try{
+
+        const {name, email, phone, address, password} = req.body;
+
+        const hashedPassword = await hashPassword(password);
+        const user = await userModel.findById(req.user._id); //req.user is coming from the protect middleware which is coming from the authController protect function which is coming from the authHelper
+    
+        if(password && password.length < 6){
+            return res.status(400).json({
+                error: 'Password must be atleast 6 characters long'
+            })
+        }
+    
+       
+    
+        const updatedUser = await userModel.findById(req.user._id,{
+            name: name || user.name,
+            email: email || user.email,
+            phone: phone || user.phone,
+            address: address || user.address,
+    
+        },{new: true});
+    
+        res.status(200).json({
+            status: 'success',
+            message: 'User updated successfully'})
+    }catch(err){
+        console.log(err)
+        res.status(500).json({
+            status: 'fail',
+            message: 'Error in updating'
+        })
+    }
+   
+}
+
+exports.getOrdersController = async (req, res) =>{
+    try{
+        const orders = await orderModel
+        .find({buyer: req.user._id})
+        .populate("products", "-photo")
+        .populate("buyer","name");
+
+        res.status(200).json({
+            status: 'success',
+            orders
+        })  
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+            status: 'fail',
+            message: 'Error in getting orders',
+            err
+        })
+    }
+}
+exports.getAllOrdersController = async (req, res) =>{
+    try{
+        const orders = await orderModel
+        .find()
+        .populate("products", "-photo")
+        .populate("buyer","name")
+        .sort({createdAt: -1});
+
+        res.status(200).json({
+            status: 'success',
+            orders
+        })  
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+            status: 'fail',
+            message: 'Error in getting orders',
+            err
+        })
+    }
+}
+
+//updating the status of teh orders
+exports.updateOrdersStatusController = async (req, res) =>{
+    try{
+
+        const {id} = req.params;
+        const {status} = req.body;
+        const orders = await orderModel.findByIdAndUpdate({id}, {status: status}, {new:true});
+        res.status(200).json({
+            orders
+        })
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+            status: 'fail',
+            message: 'Error in updating status',
+        })
+}
 }
