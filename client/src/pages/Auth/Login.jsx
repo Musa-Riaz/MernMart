@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios';
 import "../../style/AuthStyle.css";
+import {Link } from 'react-router-dom';
 import { useAuth } from '../../context/auth';
 import toast from 'react-hot-toast';
 const Login = () => {
@@ -39,8 +40,8 @@ const Login = () => {
   return (
     <Layout>
     <div className="form-container">
-      <h1 className='title'>Login Page</h1>
   <form onSubmit={handleSubmit}>
+      <h1 className='title'>Login Page</h1>
 
 <div className="mb-3">
   <input type="email" className="form-control" aria-describedby="emailHelp" placeholder='Enter your email' value={email} onChange={(e)=> setEmail(e.target.value)}  required/>
@@ -53,10 +54,11 @@ const Login = () => {
 </div>
 <button type="submit" className="btn btn-primary">Login</button>
 <div className="mt-3"><button type="submit" className="btn btn-primary" onClick={() =>{navigate('/forgot-password')} }>Forgot Password</button></div>
-
+<p className='mt-3 text-center' >New Here? Click Here to <Link to="/register">Sign Up</Link>  </p>
 </form>
 
     </div>
+  
   
   </Layout>
   )

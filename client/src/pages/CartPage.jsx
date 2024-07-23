@@ -79,8 +79,8 @@ const CartPage = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-12">
-            <h1 className="text-center bg-light p-2 mb-1">
-              {`Hello ${auth?.token && auth?.user?.name}`}
+            <h1 className="text-center bg-light p-2 mb-5">
+              {!auth?.user ? "Hello Guest" : `Hello ${auth?.token && auth?.user?.name}`}
             </h1>
             <h4 className="text-center">
               {cart?.length >= 1
@@ -125,30 +125,38 @@ const CartPage = () => {
               <h4>Current Address</h4>
               <h5>{auth?.user?.address}</h5>
             </div>
-            <div className="mt-2">
-              {!clientToken || !cart?.length ? (
-                "loading..."
+
+              {auth?.user?.address ? (
+                 <div className="mt-2">
+                 {!clientToken || !cart?.length ? (
+                   "loading..."
+                 ) : (
+                   <>
+                     <DropIn
+                       options={{
+                         authorization: clientToken,
+                         paypal: {
+                           flow: "vault",
+                         },
+                       }}
+                       onInstance={(instance) => setInstance(instance)}
+                     />
+                     <button
+                       className="btn btn-primary mb-4"
+                       onClick={handlePayment}
+                       disabled={loading || !instance || !auth?.user?.address}
+                     >
+                       {loading ? "Processing..." : "Make Payment"}
+                     </button>
+                   </>
+                 )}
+               </div>
               ) : (
-                <>
-                  <DropIn
-                    options={{
-                      authorization: clientToken,
-                      paypal: {
-                        flow: "vault",
-                      },
-                    }}
-                    onInstance={(instance) => setInstance(instance)}
-                  />
-                  <button
-                    className="btn btn-primary"
-                    onClick={handlePayment}
-                    disabled={loading || !instance || !auth?.user?.address}
-                  >
-                    {loading ? "Processing..." : "Make Payment"}
-                  </button>
-                </>
-              )}
-            </div>
+                
+                <button className = "btn btn-outline-warning" onClick={() => navigate('/login', {state:"/cart"})}>Please Login to Checkout</button>
+              )} 
+
+           
           </div>
         </div>
       </div>

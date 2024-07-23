@@ -57,7 +57,7 @@ const Orders = () => {
                         <td>{index +1}</td>
                         <td>{order?.status}</td>
                         <td>{moment(order?.createdAt).fromNow()}</td>
-                        <td>{order?.payment.success ? "Success" : "Failed"}</td>
+                        <td>{order?.payment?.success ? "Success" : "Failed"}</td>
                         <td>{order?.products?.length}</td>
                       </tr>
                     </tbody>
