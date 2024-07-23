@@ -60,7 +60,6 @@ async function getSimilarProduct(pid, cid){
         <h6 className="text-center">Price: ${product.price}</h6>
         <h6 className="text-center">Quantity: {product.quantity}</h6>
         <h6 className="text-center">Category: {product.category?.name}</h6>
-        <button className="btn btn-secondary ms-1">Add to cart</button>
         </div>
       </div>
       <hr/>
@@ -83,7 +82,6 @@ async function getSimilarProduct(pid, cid){
                   <h5 className="card-title">{realtedProduct.name}</h5>
                   <p className="card-text">{realtedProduct.description.substring(0, 30)}...</p>
                   <p className="card-text">$ {realtedProduct.price}</p>
-                  <button className="btn btn-secondary ms-1">Add to cart</button>
                 </div>
               </div>
           ))}
