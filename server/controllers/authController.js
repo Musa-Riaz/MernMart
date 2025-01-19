@@ -5,7 +5,7 @@ const orderModel = require('../models/orderModel');
 exports.registerController = async (req, res) => {
  
     try{
-        const {name, email, password, phone, address, answer} = req.body;
+        const {name, email, password, phone, address, answer, role} = req.body;
         //validation
         if(!name){
             return res.status(400).json({
@@ -37,6 +37,12 @@ exports.registerController = async (req, res) => {
                 message: 'Please provide a address'
             })
         }
+        if(!role){
+            return res.status(400).json({
+                status: 'fail',
+                message: 'Please provide a role'
+            })
+        }
         if(!answer){
             return res.status(400).json({
                 status: 'fail',
@@ -57,7 +63,7 @@ exports.registerController = async (req, res) => {
         const hashedPassword = await hashPassword(password);
 
         //save user
-        const user = await new userModel({name, email, phone, address, password: hashedPassword, answer}).save();
+        const user = await new userModel({name, email, phone, address, password: hashedPassword, answer, role}).save();
 
         res.status(201).json({
             status: 'success',

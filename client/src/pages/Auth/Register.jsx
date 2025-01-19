@@ -12,12 +12,13 @@ const Register = () => {
     const [address, setAddress] = useState('');
     const [password, setPassword] = useState('');
     const [answer, setAnswer] = useState('');
+    const [role, setRole] = useState(0);
     const navigate = useNavigate();
 
    async function handleSubmit(e){
         e.preventDefault();
         try{
-            const res = await axios.post('/api/v1/auth/register', {name, email, password, phone, address, answer});
+            const res = await axios.post('/api/v1/auth/register', {name, email, password, phone, address, answer, role});
             if(res.data.status){
                 toast.success(res.data.message);
                 navigate('/login'); //if user is created, we will direct him to the login route
@@ -50,6 +51,13 @@ const Register = () => {
   </div>
   <div className="mb-3">
     <input type="password" className="form-control" placeholder='Enter your password' value={password} onChange={(e)=> setPassword(e.target.value)}  required/>
+  </div>
+  <div className="mb-3">
+    <select className="form-control"  onChange={(e)=> setRole(e.target.value)}  required>
+      <option >Select Role</option>
+      <option value={0}>User</option>
+      <option value={1}>Admin</option>
+    </select>
   </div>
   <div className="mb-3">
     <input type="text" className="form-control" placeholder="What is your bestfriend's name" value={answer} onChange={(e)=> setAnswer(e.target.value)}  required/>

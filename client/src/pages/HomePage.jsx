@@ -171,7 +171,7 @@ async function loadMore(){
               <button className="btn btn-primary" onClick={((e)=>{
                 e.preventDefault();
                 setPage(page + 1);
-              })}>{loading ? "loading..." : "Loadmore" }</button>
+              })}>{loading ? "Loading..." : "Load more" }</button>
             )}
         </div>
         </div >

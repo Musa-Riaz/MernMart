@@ -34,7 +34,7 @@ const CartPage = () => {
   const getToken = async () => {
     try {
       const { data } = await axios.get("/api/v1/product/brain-tree/token");
-      console.log("Fetched client token:", data?.clientToken); // Debug statement
+     // console.log("Fetched client token:", data?.clientToken); // Debug statement
       setClientToken(data?.clientToken);
     } catch (err) {
       console.log("Error fetching client token:", err);
